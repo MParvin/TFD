@@ -5,19 +5,21 @@ Created on Fri Jul  4 12:03:00 2018
 @author: mparvin
 """
 
+import sys
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import configparser
 from os import path
 from os import makedirs
+import time
 
 config = configparser.ConfigParser()
 config.read('config')
 ### Get admin chat_id from config file
 ### For more security replies only send to admin chat_id
 adminCID  = config['SecretConfig']['adminCID']
-videoPath = config['SecretConfig']['videoDirectoryPath']
 photoPath = config['SecretConfig']['photoDirectoryPath']
+videoPath = config['SecretConfig']['videoDirectoryPath']
 musicPath = config['SecretConfig']['musicDirectoryPath']
 if not path.isdir(videoPath):
 	makedirs(videoPath)
@@ -61,30 +63,38 @@ def allCheck(bot, update):
 						To use this bot contact @{}""".format(config['SecretConfig']['supportUser'])
 		update.message.reply_text(errorMessage)
 	else:
-	    update.message.reply_text("Downloading file, Please wait")
+		try:
+			messageID = update.message.message_id
+			update.message.reply_text("Downloading file, Please wait", reply_to_message_id=messageID)
 
-	    print(update.message)
-	    return
-	    if update.message.audio:
-	    	fileID = update.message.audio.file_id
-    		fileExtension = '.mp3'
-	    	storeFolder = musicPath
-	    elif update.message.video:
-	    	fileID = update.message.video.file_id
-    		fileExtension = '.mp4'
-	    	storeFolder = videoPath
-	    elif update.message.photo:
-	    	fileID = update.message.photo[-1].file_id
-	    	fileExtension = '.jpg'
-	    	storeFolder = photoPath
-	    else:
-	    	update.message.reply_text("Only send Video or Photo or Audio ;)")
-	    	return
+			# print(update.message)
+			if update.message.audio:
+				fileID = update.message.audio.file_id
+				fileExtension = '.mp3'
+				storeFolder = musicPath
+			elif update.message.video:
+				fileID = update.message.video.file_id
+				fileExtension = '.mp4'
+				storeFolder = videoPath
+			elif update.message.photo:
+				fileID = update.message.photo[-1].file_id
+				fileExtension = '.jpg'
+				storeFolder = photoPath
+			else:
+				update.message.reply_text("Only send Video or Photo or Audio ;)", reply_to_message_id=messageID)
+				return
+			
+			filePath = storeFolder + str(int(time.time())) + fileExtension
+			newFile = bot.get_file(fileID)
+			
+			newFile.download(filePath)
+			update.message.reply_text("Download finished", reply_to_message_id=messageID)
+		except Exception as ex:
+			template = "An exception of type {0} occured, Arguments:\n{1!r}\n in line {2}"
+			errorMessage = template.format(type(ex).__name__,ex.args,sys.exc_info()[-1].tb_lineno)
+			### Send error to admin
+			bot.sendMessage(text=errorMessage, chat_id=adminCID)
 
-	    filePath = storeFolder + str(int(time.time())) + fileExtension
-    	dlFile = bot.getFile(fileID)
-    	dlFile.download(filePath)
-	    
 
 
 def error(bot, update, error):
