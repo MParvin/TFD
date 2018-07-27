@@ -64,19 +64,27 @@ def allCheck(bot, update):
 	    update.message.reply_text("Downloading file, Please wait")
 
 	    print(update.message)
+	    return
 	    if update.message.audio:
 	    	fileID = update.message.audio.file_id
+    		fileExtension = '.mp3'
 	    	storeFolder = musicPath
 	    elif update.message.video:
 	    	fileID = update.message.video.file_id
+    		fileExtension = '.mp4'
 	    	storeFolder = videoPath
 	    elif update.message.photo:
 	    	fileID = update.message.photo[-1].file_id
+	    	fileExtension = '.jpg'
 	    	storeFolder = photoPath
 	    else:
 	    	update.message.reply_text("Only send Video or Photo or Audio ;)")
+	    	return
 
-
+	    filePath = storeFolder + str(int(time.time())) + fileExtension
+    	dlFile = bot.getFile(fileID)
+    	dlFile.download(filePath)
+	    
 
 
 def error(bot, update, error):
