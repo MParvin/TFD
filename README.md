@@ -6,7 +6,14 @@ Telegram File Downloader
 
   1 - Setup Virtualenv
   
-     virtualenv .env
+     virtualenv .env -p python3
+     
+  ** After running this command if you get this error :
+  
+     The path python3 (from --python=python3) does not exist
+     
+   You have not python3 or python3 is not in your path **
+
     
   2 - Activate Virtualenv
   
