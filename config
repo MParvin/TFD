@@ -17,6 +17,6 @@ supportUser = mmparvin
 
 
 ### Where files to be store
-photoDirectoryPath = '/home/mparvin/Pictures/TelegramDL/'
-videoDirectoryPath = '/home/mparvin/Videos/TelegramDL/'
-musicDirectoryPath = '/home/mparvin/Music/TelegramDL/'
+photoDirectoryPath = /home/mparvin/Pictures/TelegramDL/
+videoDirectoryPath = /home/mparvin/Videos/TelegramDL/
+musicDirectoryPath = /home/mparvin/Music/TelegramDL/
