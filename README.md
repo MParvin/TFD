@@ -32,3 +32,7 @@ Telegram File Downloader
     ./bot.py
   
 After running bot send your Video, Audio, Voice and Image to this bot for downloading file.
+
+
+Todo:
+  Add comment to bot.py
