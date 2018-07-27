@@ -61,13 +61,16 @@ def allCheck(bot, update):
 						To use this bot contact @{}""".format(config['SecretConfig']['supportUser'])
 		update.message.reply_text(errorMessage)
 	else:
-	    """Echo the user message."""
-	    update.message.reply_text("Welcome\n")
+	    update.message.reply_text("Downloading file, Please wait")
 	    print(update.message)
 	    if update.message.photo:
-	    	storeFolder = 
+	    	storeFolder = photoPath
 	    if update.message.video:
-	    	storeFolder = 
+	    	storeFolder = videoPath
+	    if update.message.music:
+	    	storeFolder = musicPath
+
+
 
 
 def error(bot, update, error):
@@ -77,8 +80,6 @@ def error(bot, update, error):
     logger.warning()
     ### Send error to admin
     bot.sendMessage(text=errorMessage, chat_id=adminCID)
-    ### Send an custom error to user
-    update.message.reply_text("And error occured, Please try again later")
 
 
 def main():
