@@ -21,12 +21,16 @@ adminCID  = config['SecretConfig']['adminCID']
 photoPath = config['SecretConfig']['photoDirectoryPath']
 videoPath = config['SecretConfig']['videoDirectoryPath']
 musicPath = config['SecretConfig']['musicDirectoryPath']
+voicePath = config['SecretConfig']['voicesDirectoryPath']
+
 if not path.isdir(videoPath):
 	makedirs(videoPath)
 if not path.isdir(photoPath):
 	makedirs(photoPath)
 if not path.isdir(musicPath):
 	makedirs(musicPath)
+if not path.isdir(voicePath):
+	makedirs(voicePath)
 
 
 # Enable logging
@@ -72,6 +76,10 @@ def allCheck(bot, update):
 				fileID = update.message.audio.file_id
 				fileExtension = '.mp3'
 				storeFolder = musicPath
+			if update.message.voice:
+				fileID = update.message.voice.file_id
+				fileExtension = '.ogg'
+				storeFolder = voicePath
 			elif update.message.video:
 				fileID = update.message.video.file_id
 				fileExtension = '.mp4'
@@ -120,6 +128,7 @@ def main():
 
     # on noncommand i.e message - Download files
     dp.add_handler(MessageHandler([Filters.photo, Filters.video, Filters.audio], allCheck))
+	dp.add_handler(MessageHandler(Filters.text, help))
 
     # log all errors
     dp.add_error_handler(error)
