@@ -128,7 +128,7 @@ def main():
 
     # on noncommand i.e message - Download files
     dp.add_handler(MessageHandler([Filters.photo, Filters.video, Filters.audio], allCheck))
-	dp.add_handler(MessageHandler(Filters.text, help))
+    dp.add_handler(MessageHandler(Filters.text, help))
 
     # log all errors
     dp.add_error_handler(error)
