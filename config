@@ -6,4 +6,7 @@ adminCID = 131728488
 usersChatID = 131728486,131728489,131728490,131728491
 ### Support User
 supportUser = mmparvin
-
+### Where files to be store
+photoDirectoryPath = '/home/mparvin/Pictures/TelegramDL/'
+videoDirectoryPath = '/home/mparvin/Videos/TelegramDL/'
+musicDirectoryPath = '/home/mparvin/Music/TelegramDL/'

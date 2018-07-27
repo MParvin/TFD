@@ -58,13 +58,15 @@ def allCheck(bot, update):
 	    """Echo the user message."""
 	    update.message.reply_text("Welcome\n")
 	    print(update.message)
+	    checkDirectories()
 	    if update.message.photo:
 	    	storeFolder = 
 	    if update.message.video:
 	    	storeFolder = 
 
 
-
+def checkDirectories():
+	if path.isdir()
 
 def error(bot, update, error):
     """Log Errors caused by Updates."""
