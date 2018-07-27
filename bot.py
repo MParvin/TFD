@@ -9,7 +9,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import configparser
 from os import path
-
+from os import makedirs
 
 config = configparser.ConfigParser()
 config.read('config')
@@ -19,6 +19,12 @@ adminCID  = config['SecretConfig']['adminCID']
 videoPath = config['SecretConfig']['videoDirectoryPath']
 photoPath = config['SecretConfig']['photoDirectoryPath']
 musicPath = config['SecretConfig']['musicDirectoryPath']
+if not path.isdir(videoPath):
+	makedirs(videoPath)
+if not path.isdir(photoPath):
+	makedirs(photoPath)
+if not path.isdir(musicPath):
+	makedirs(musicPath)
 
 
 # Enable logging
@@ -58,15 +64,11 @@ def allCheck(bot, update):
 	    """Echo the user message."""
 	    update.message.reply_text("Welcome\n")
 	    print(update.message)
-	    checkDirectories()
 	    if update.message.photo:
 	    	storeFolder = 
 	    if update.message.video:
 	    	storeFolder = 
 
-
-def checkDirectories():
-	if path.isdir()
 
 def error(bot, update, error):
     """Log Errors caused by Updates."""
