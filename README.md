@@ -8,7 +8,7 @@ Telegram File Downloader
   
      virtualenv .env -p python3
      
-  ** After running this command if you get this error :
+  ** After running command if you get this error :
   
      The path python3 (from --python=python3) does not exist
      
@@ -26,6 +26,10 @@ Telegram File Downloader
   4 - Edit Config file with your file editor(My editor is vim)
     
     vim config
+    
+   If You want to run this bot on windows, Your folders path in config file will be like this:
+   
+    c:\Users\MParvin\...
   
   5 - run bot
   
