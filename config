@@ -1,3 +1,9 @@
 [SecretConfig]
-token = 193025875:AAHZ3hIanIau-Hg04B-mZREFBjLl6GvM9fk
-admincid = 131728488
+token = 213776230:AAF0GM4DJimfEELayQcFnE0dymrJOkRNk20
+### Admin chat id, to send error logs
+adminCID = 131728488
+### Only these users can use this bot
+usersChatID = 131728486,131728489,131728490,131728491
+### Support User
+supportUser = mmparvin
+
