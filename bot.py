@@ -76,7 +76,7 @@ def allCheck(bot, update):
 				fileID = update.message.audio.file_id
 				fileExtension = '.mp3'
 				storeFolder = musicPath
-			if update.message.voice:
+			elif update.message.voice:
 				fileID = update.message.voice.file_id
 				fileExtension = '.ogg'
 				storeFolder = voicePath
