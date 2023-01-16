@@ -2,7 +2,14 @@
 Telegram File Downloader
   This bot download media files(Video, Photo, Audio and Voice) to specific folder.
 
-*Run:
+## Run with Docker
+Add Telegram Token and Chat IDs to config file, then:
+
+```bash
+docker-compose up -d
+```
+
+## Run without Docker:
 
   1 - Setup Virtualenv
   
