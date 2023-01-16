@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+  tfd:
+    image: mparvin/tfd:latest
+    build: .
+    volumes:
+      - tfd:/var/lib/tfd
+      - ./config:/app/config
+    restart: always
