@@ -8,3 +8,6 @@ services:
       - tfd:/var/lib/tfd
       - ./config:/app/config
     restart: always
+
+volumes:
+  tfd: {}
