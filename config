@@ -18,9 +18,9 @@ supportUser = mmparvin
 
 ### Where files to be store
 ### Attention : put / in end of every path
-photoDirectoryPath = /home/mparvin/Downloads/TelegramDL/Pictures/
-videoDirectoryPath = /home/mparvin/Downloads/TelegramDL/Videos/
-musicDirectoryPath = /home/mparvin/Downloads/TelegramDL/Music/
-voicesDirectoryPath = /home/mparvin/Downloads/TelegramDL/Voices/
-documentDirectoryPath = /home/mparvin/Downloads/TelegramDL/Documents/
-otherDirectoryPath = /home/mparvin/Downloads/TelegramDL/
+photoDirectoryPath = /var/lib/tfd/Pictures/
+videoDirectoryPath = /var/lib/tfd/Videos/
+musicDirectoryPath = /var/lib/tfd/Music/
+voicesDirectoryPath = /var/lib/tfd/Voices/
+documentDirectoryPath = /var/lib/tfd/Documents/
+otherDirectoryPath = /var/lib/tfd/
