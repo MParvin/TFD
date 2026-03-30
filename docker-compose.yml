@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  tfd:
+    build: .
+    container_name: tfd-bot
+    restart: unless-stopped
+    
+    volumes:
+      # Mount directory for downloaded files (persistent storage)
+      - tfd_data:/var/lib/tfd
+      
+      # Mount configuration file
+      # Copy config.example.yaml to ./config.yaml and edit before running
+      - ./config.yaml:/app/config.yaml:ro
+      
+      # Optional: Mount a custom configuration directory
+      # - ./configs:/configs:ro
+    
+    environment:
+      # Optional: You can override config values with environment variables
+      # TFD_TOKEN: "your_bot_token_here"
+      # TFD_ADMIN_CHAT_ID: "your_admin_chat_id"
+      # TFD_SUPPORT_USER: "your_username"
+      
+      # Timezone (optional)
+      TZ: "UTC"
+      
+      # Logging level (optional)
+      LOG_LEVEL: "info"
+    
+    # Optional: If you need to use custom config file location
+    # command: ["--config", "/configs/custom-config.yaml"]
+    
+    # Optional: Override proxy settings
+    # command: ["--config", "/app/config.yaml", "--proxy", "http://proxy.example.com:8080"]
+    
+    # Network mode (default: bridge)
+    # network_mode: "bridge"
+    
+    # Optional: Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+    
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+    
+    # Read-only filesystem (except for mounted volumes)
+    read_only: true
+    
+    # Temporary filesystems for directories that need write access
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+
+volumes:
+  tfd_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${TFD_DATA_PATH:-./data}
+
+# Optional: Networks configuration
+# networks:
+#   tfd-network:
+#     driver: bridge

@@ -4,11 +4,15 @@ config
 tfd
 tfd.exe
 
+# Docker data directory
+data/
+docker-compose.override.yml
+
 # IDE files
 .idea/
 .vscode/
 *.swp
-*.swo
+.swo
 *~
 
 # OS files

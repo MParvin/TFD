@@ -1,0 +1,35 @@
+# Git and development files
+.git
+.gitignore
+README.md
+PROMPT.md
+
+# Docker files (avoid recursion)
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml
+.dockerignore
+
+# Development and data directories
+data/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+tfd
+tfd.exe
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Testing
+*.test
+*.out
+
+# Configuration files with secrets
+config
+config.yaml

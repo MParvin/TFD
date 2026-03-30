@@ -44,6 +44,41 @@ cd tfd
 go build -o tfd .
 ```
 
+### Using Docker
+
+```bash
+# Clone the repository
+git clone https://github.com/mparvin/tfd.git
+cd tfd
+
+# Copy and edit configuration
+cp config.example.yaml config.yaml
+nano config.yaml
+
+# Run with Docker Compose
+docker-compose up -d
+```
+
+### Quick Setup Script
+
+For the easiest setup, use the provided setup script:
+
+```bash
+# Clone repository
+git clone https://github.com/mparvin/tfd.git
+cd tfd
+
+# Run setup script (will guide you through configuration)
+./setup-docker.sh
+```
+
+The script will:
+- Check Docker installation
+- Create configuration file
+- Guide you through bot token setup
+- Build and start the container
+- Show useful management commands
+
 ## ⚙️ Configuration
 
 ### 1. Create Configuration File
@@ -122,10 +157,40 @@ proxy: "http://proxy.example.com:8080"
 ./tfd --help
 ```
 
+### Using Docker
+
+```bash
+# Run with Docker Compose (recommended)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the bot
+docker-compose down
+
+# Run with custom config
+docker-compose run --rm tfd --config /configs/custom.yaml
+```
+
+### Using Docker directly
+
+```bash
+# Build image
+docker build -t tfd .
+
+# Run with volume mounts
+docker run -d \
+  --name tfd-bot \
+  --restart unless-stopped \
+  -v $(pwd)/config.yaml:/app/config.yaml:ro \
+  -v $(pwd)/data:/var/lib/tfd \
+  tfd
+```
+
 ## 🌐 Proxy Configuration
 
-TFD supports HTTP and SOCKS5 proxies for regions where Telegram is blocked:
-proxies for regions where Telegram is blocked:
+TFD supports HTTP proxies for regions where Telegram is blocked:
 
 ### HTTP Proxy
 ```yaml
@@ -134,9 +199,80 @@ proxy: "http://proxy.example.com:8080"
 
 ### Via Command Line
 ```bash
-./tfd --proxy http://proxy.example.com:8
+./tfd --proxy http://proxy.example.com:8080
+```
 
-## 📂 File Organization
+## � Docker Deployment
+
+TFD can be easily deployed using Docker for consistent and isolated execution.
+
+### Quick Start with Docker Compose
+
+1. **Clone and configure**:
+   ```bash
+   git clone https://github.com/mparvin/tfd.git
+   cd tfd
+   cp config.example.yaml config.yaml
+   nano config.yaml  # Edit with your bot token and settings
+   ```
+
+2. **Run the bot**:
+   ```bash
+   docker-compose up -d
+   ```
+
+3. **Monitor logs**:
+   ```bash
+   docker-compose logs -f tfd
+   ```
+
+### Docker Compose Features
+
+- **Persistent Storage**: Downloaded files are stored in `./data/` directory
+- **Configuration Management**: Mount your `config.yaml` as read-only
+- **Resource Limits**: Memory and CPU limits configured for optimization  
+- **Security**: Runs as non-root user with read-only filesystem
+- **Auto-restart**: Container automatically restarts on failure
+
+### Environment Variables
+
+You can override configuration using environment variables in `docker-compose.yml`:
+
+```yaml
+environment:
+  TFD_TOKEN: "your_bot_token_here"
+  TFD_ADMIN_CHAT_ID: "123456789"
+  TFD_SUPPORT_USER: "your_username"
+  TZ: "UTC"
+```
+
+### Docker Commands
+
+```bash
+# Build image locally
+docker build -t tfd .
+
+# Run container directly  
+docker run -d --name tfd-bot \
+  -v $(pwd)/config.yaml:/app/config.yaml:ro \
+  -v $(pwd)/data:/var/lib/tfd \
+  --restart unless-stopped \
+  tfd
+
+# View logs
+docker logs -f tfd-bot
+
+# Stop and remove  
+docker stop tfd-bot && docker rm tfd-bot
+
+# Using Docker Compose
+docker-compose up -d        # Start in background
+docker-compose logs -f      # View logs  
+docker-compose down         # Stop and remove
+docker-compose pull         # Update image
+```
+
+## �📂 File Organization
 
 TFD automatically organizes downloaded files:
 
@@ -167,11 +303,29 @@ Files are automatically timestamped: `photo_20240330_143022_image.jpg`
 
 ### Development Setup
 
+#### Native Go Development
 ```bash
 git clone https://github.com/mparvin/tfd.git
 cd tfd
 go mod download
 go build .
+```
+
+#### Docker Development  
+```bash
+git clone https://github.com/mparvin/tfd.git
+cd tfd
+
+# Copy and configure for development
+cp config.example.yaml config.yaml
+nano config.yaml
+
+# Use override file for development
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+
+# Or build and run development container
+docker build -t tfd-dev .
+docker run -v $(pwd):/app tfd-dev
 ```
 
 ### Running Tests
@@ -183,9 +337,16 @@ go vet ./...
 
 ## 📋 Requirements
 
-- Go 1.22+ (for building from source)
+### Runtime Requirements (All deployment methods)
 - Telegram Bot Token
 - Network access to Telegram API (direct or via proxy)
+
+### For Binary/Source Deployment
+- Go 1.22+ (for building from source)
+
+### For Docker Deployment (Recommended)
+- Docker 20.10+ and Docker Compose 2.0+
+- No Go installation required
 
 ## 📄 License
 
