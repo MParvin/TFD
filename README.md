@@ -204,4 +204,3 @@ If this project helped you, please consider giving it a star! ⭐
 ---
 
 **Made with ❤️ by [Mohammad Parvin](https://github.com/mparvin)**
-
