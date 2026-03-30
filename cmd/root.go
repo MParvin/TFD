@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"os"
+	"log"
 
+	"github.com/mparvin/tfd/tools"
 	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -22,15 +23,23 @@ var rootCmd = &cobra.Command{
     Audios
     Links
     `,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		// Ensure all directories exist
+		if err := tools.EnsureDirectories(); err != nil {
+			log.Fatalf("Failed to ensure directories: %v", err)
+		}
+
+		// Start the Telegram bot
+		log.Println("Starting TFD (Telegram File Downloader)...")
+		if err := tools.StartBot(); err != nil {
+			log.Fatalf("Failed to start bot: %v", err)
+		}
+	},
 }
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
 
@@ -42,10 +51,10 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tfd.yaml)")
+	rootCmd.PersistentFlags().String("proxy", "", "proxy URL (optional, e.g., socks5://127.0.0.1:1080 or http://proxy.example.com:8080)")
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// Bind proxy flag to viper
+	viper.BindPFlag("proxy", rootCmd.PersistentFlags().Lookup("proxy"))
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -57,8 +66,7 @@ func initConfig() {
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Fatal(err)
 		}
 
 		// Search config in home directory with name ".tfd" (without extension).
