@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+          - goos: linux
+            goarch: arm64
+          - goos: linux  
+            goarch: arm
+          - goos: darwin
+            goarch: amd64
+          - goos: darwin
+            goarch: arm64
+          - goos: windows
+            goarch: amd64
+            ext: .exe
+          - goos: windows
+            goarch: arm64
+            ext: .exe
+            
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.22'
+        
+    - name: Cache Go modules
+      uses: actions/cache@v4
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+          
+    - name: Download dependencies
+      run: go mod download
+      
+    - name: Build binary
+      env:
+        CGO_ENABLED: 0
+        GOOS: ${{ matrix.goos }}
+        GOARCH: ${{ matrix.goarch }}
+      run: |
+        BINARY_NAME="tfd-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }}"
+        go build -ldflags="-s -w -X main.version=${{ github.ref_name }}" -o "${BINARY_NAME}" .
+        echo "BINARY_NAME=${BINARY_NAME}" >> $GITHUB_ENV
+        
+    - name: Upload to release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ${{ env.BINARY_NAME }}
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+        body: |
+          ## TFD ${{ github.ref_name }}
+          
+          ### Downloads
+          - **Linux**: tfd-linux-amd64, tfd-linux-arm64, tfd-linux-arm
+          - **macOS**: tfd-darwin-amd64, tfd-darwin-arm64  
+          - **Windows**: tfd-windows-amd64.exe, tfd-windows-arm64.exe
+          
+          ### Installation
+          1. Download the appropriate binary for your platform
+          2. Make it executable: `chmod +x tfd-*` (Linux/macOS)
+          3. Copy configuration: `cp config.example.yaml ~/.tfd.yaml`
+          4. Edit `~/.tfd.yaml` with your bot token and settings
+          5. Run: `./tfd-*`
+          
+          ### What's New
+          See the full changelog below.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
